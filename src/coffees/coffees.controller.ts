@@ -10,7 +10,7 @@ export class CoffeesController {
 
   @Get()
   findAll(@Query() {limit, offset}) {
-    return this.coffeesService.getAll();
+    return this.coffeesService.getAll({limit, offset});
     
   }
 
@@ -20,7 +20,7 @@ export class CoffeesController {
   }
 
   @Delete(':id')
-  deleteOne(@Param('id') id: string) {
+  deleteOne(@Param('id') id: number) {
     return this.coffeesService.remove(id);
   }
 
