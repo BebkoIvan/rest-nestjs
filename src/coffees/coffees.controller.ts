@@ -1,4 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, NotFoundException, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, NotFoundException, Param, Patch, Post, Put, Query, Res, SetMetadata } from '@nestjs/common';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
+import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -8,14 +11,15 @@ export class CoffeesController {
 
   constructor(private readonly coffeesService: CoffeesService) {}
 
+  @Public()
   @Get()
-  findAll(@Query() {limit, offset}) {
-    return this.coffeesService.getAll({limit, offset});
-    
+  async findAll(@Protocol() protocol, @Query() {limit, offset}) {
+    console.log(protocol);
+    return this.coffeesService.getAll({limit, offset});  
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.coffeesService.findOne(id);
   }
 
